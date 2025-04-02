@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    protected $fillable = ['street', 'number', 'zip', 'city', 'state', 'country'];
+    protected $fillable = ['street', 'number', 'zip', 'city', 'state', 'country', 'user_id'];
 
     public function order(){
         return $this->hasMany(Order::class);
