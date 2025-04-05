@@ -2,9 +2,10 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\OrderController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,3 +32,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 
 
+Route::resource('/category', CategoryController::class);
+Route::resource('/product', ProductController::class);
