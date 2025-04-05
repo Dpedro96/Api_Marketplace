@@ -15,7 +15,7 @@ class AddressRepository{
     }
 
     public function getById($id,$user_id){
-        return $this->addressModel->find($id)->where('user_id',$user_id)->get();
+        return $this->addressModel->where('user_id',$user_id)->find($id);
     }
 
 }

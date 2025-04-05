@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Coupon extends Model
 {
-    protected $fillable = ['code', 'startDate', 'endDate', 'discountPercentage'];
+    protected $fillable = ['code', 'startDate', 'endDate', 'discountPercentage','user_id','address_id','coupon_id'];
 
     public function order(){
         return $this->hasMany(Order::class);
