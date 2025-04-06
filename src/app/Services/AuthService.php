@@ -6,8 +6,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-use function Laravel\Prompts\password;
-
 class AuthService{
     public function register($data){
         if(!($data['password']==$data['confirm_password'])){
