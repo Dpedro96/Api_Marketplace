@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Discount extends Model
 {
-    protected $fillable = ['description', 'startDate', 'endDate', 'discountPercentage'];
+    protected $fillable = ['description', 'startDate', 'endDate', 'discountPercentage', 'product_id'];
 }

@@ -30,10 +30,10 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id){
         $data = $request->validate([
-            'nome'=>'sometimes',
+            'name'=>'sometimes',
             'description'=>'sometimes'
         ]);
-        $category=$this->categoryService->update($data,$id);
+        return response()->json($this->categoryService->update($data,$id), 201);
     }
 
     public function destroy($id){

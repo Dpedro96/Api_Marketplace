@@ -15,7 +15,7 @@ class OrderController extends Controller
             'status'=>'required',
             'totalAmount'=>'required',
             'address_id'=>'required',
-            'coupon_id'=>'required'
+            'coupon_id'=>'sometimes'
         ]);
         $order=$this->orderService->create($data);
         return response()->json($order, 201);

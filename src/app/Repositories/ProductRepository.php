@@ -15,14 +15,14 @@ class ProductRepository{
     }
 
     public function getByIdProduct($id){
-        return $this->productModel->find($id);
+        return $this->productModel->findOrFail($id);
     }
-
+    
     public function updateProduct($data,$id){
-        return $this->productModel->find($id)->update($data);
+        return $this->productModel->findOrFail($id)->update($data);
     }
 
     public function deleteProduct($id){
-        return $this->productModel->find($id)->delete();
+        return $this->productModel->findOrFail($id)->delete();
     }
 }
