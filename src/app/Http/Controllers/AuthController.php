@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function __construct(protected AuthService $authService){}
+    public function __construct(protected AuthService $authService, protected CartController $cartController){}
 
     public function register(Request $request){
         $validated = $request->validate([
@@ -19,6 +19,7 @@ class AuthController extends Controller
             'confirm_password'=>'required'
         ]);
         $data = $this->authService->register($validated);
+        $this->cartController->store($data['id']);
         return response()->json($data, 200);
     }
 

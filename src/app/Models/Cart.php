@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
-    protected $fillable = ['createdAt'];
+    protected $fillable = ['user_id'];
 
     public function cartItem(){
         return $this->hasMany(CartItem::class);

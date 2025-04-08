@@ -1,10 +1,12 @@
 <?php 
-namespace App\Service;
+namespace App\Services;
 
-use App\Repositories\CartRepositorie;
+use App\Repositories\CartRepository;
 
 class CartService{
-    public function __construct(protected CartRepositorie $cartRepositorie){}
+    public function __construct(protected CartRepository $cartRepository){}
 
-    
+    public function create($id){
+        $this->cartRepository->createCart($id);
+    }
 }
