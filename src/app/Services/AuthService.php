@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthService{
+
     public function register($data){
         if(!($data['password']==$data['confirm_password'])){
             return false;

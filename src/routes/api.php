@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -31,17 +32,18 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::resource('/address', AddressController::class);
     Route::resource('/orders', OrderController::class);
     Route::get('/category', [CategoryController::class, 'index']);
-    Route::get('/category', [CategoryController::class, 'show']);
+    Route::get('/category/{id}', [CategoryController::class, 'show']);
     Route::get('/product', [ProductController::class, 'index']);
-    Route::get('/product', [ProductController::class, 'show']);
+    Route::get('/product/{id}', [ProductController::class, 'show']);
     Route::resource('/cart/item', CartItemController::class);
     Route::delete('/cart/item', [CartItemController::class, 'clear']);
     Route::group(['middleware' => 'checkPermissionsModerator:sanctum'], function(){
-        Route::resource('/product', ProductController::class);
+        Route::resource('/product', ProductController::class)->except(['index','show']);
         Route::group(['middleware' => 'checkPermissionsAdmin:sanctum'], function(){
             Route::post('/user/moderator',[UserController::class, 'storeModerator']);
-            Route::resource('/category', CategoryController::class);
+            Route::resource('/category', CategoryController::class)->except(['index','show']);
             Route::resource('/coupon', CouponController::class);
+            Route::resource('/discount', DiscountController::class);
         });
     });
     Route::get('/user',[UserController::class, 'getUser']);

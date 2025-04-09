@@ -11,11 +11,11 @@ class OrderRepository{
     }
 
     public function getAllOrders($user_id){
-        return $this->orderModel->where('user_id',$user_id)->get();
+        return $this->orderModel->where('user_id',$user_id)->with('orderItem')->get();
     }
 
     public function getByIdOrder($id,$user_id){
-        return $this->orderModel->where('user_id',$user_id)->find($id);
+        return $this->orderModel->where('user_id',$user_id)->with('orderItem')->find($id);
     }
 
     public function updateOrder($data,$id,$user_id){

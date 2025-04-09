@@ -11,19 +11,14 @@ class OrderController extends Controller
 
     public function store(Request $request){
         $data = $request->validate([
-            'orderDate'=>'required',
-            'status'=>'required',
-            'totalAmount'=>'required',
             'address_id'=>'required',
             'coupon_id'=>'sometimes'
         ]);
-        $order=$this->orderService->create($data);
-        return response()->json($order, 201);
+        return response()->json($this->orderService->create($data), 201);
     }
 
     public function index(){
-        $orders=$this->orderService->getAll();
-        return response()->json($orders, 201);
+        return response()->json($this->orderService->getAll(), 201);
     }
 
     public function show($id){
@@ -33,9 +28,9 @@ class OrderController extends Controller
 
     public function update(Request $request, $id){
         $data = $request->validate([
-            'status'=>'somentimes'
+            'status'=>'sometimes'
         ]);
-        $order=$this->orderService->update($data,$id);
+        return response()->json($this->orderService->update($data,$id), 201);
     }
 
     public function destroy($id){

@@ -1,16 +1,30 @@
 <?php
 namespace App\Services;
 
+use App\Models\Discount;
 use App\Repositories\CartItemRepository;
+use App\Repositories\DiscountRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Support\Facades\Auth;
 
 class CartItemService{
-    public function __construct(protected CartItemRepository $cartItemRepository, protected ProductRepository $productRepository){}
+    public function __construct(
+        protected CartItemRepository $cartItemRepository, 
+        protected ProductRepository $productRepository, 
+        protected DiscountRepository $discountRepository
+    ){}
 
     public function create($data){
+        $totalDiscount=0;
+        
         $product=$this->productRepository->getByIdProduct($data['product_id']);
+        $disconts=$this->discountRepository->getByIdProductDiscount($product['id']);
+
+        foreach($disconts as $discount){$totalDiscount+=$discount->discountPercentage;}
+        $product->price-=$product->price*($totalDiscount/100);
+
         $data+=array('unitPrice'=>$product->price,'cart_id'=>Auth::authenticate()->cart->id);
+
         return $this->cartItemRepository->createCartItem($data);
     }
 

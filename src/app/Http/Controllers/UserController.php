@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function __construct(protected UserService $userService){}
+    public function __construct(protected UserService $userService, protected CartController $cartController){}
 
     public function getUser(){
         $user=$this->userService->getByUser();
@@ -33,7 +33,9 @@ class UserController extends Controller
             'password'=>'required',
             'confirm_password'=>'required'
         ]);
-        return response()->json($this->userService->createModerator($data), 201);
+        $moderator=$this->userService->createModerator($data);
+        $this->cartController->store($moderator['id']);
+        return response()->json($moderator, 201);
     }
 
     public function destroy(){
