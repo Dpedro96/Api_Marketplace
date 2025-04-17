@@ -17,9 +17,6 @@ class UserService{
     }
 
     public function createModerator($data){
-        if(!($data['password']==$data['confirm_password'])){
-            return false;
-        }
         $data['password']=Hash::make($data['password']);
         $data+=array('role'=>'MODERATOR');
         return $this->userRepository->createModeratorUser($data);

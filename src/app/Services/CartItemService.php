@@ -18,13 +18,19 @@ class CartItemService{
         $totalDiscount=0;
         
         $product=$this->productRepository->getByIdProduct($data['product_id']);
+
+        if($data['quantity']>$product->stock){return "A quantidade solicitada excede o estoque disponível";}
+
         $disconts=$this->discountRepository->getByIdProductDiscount($product['id']);
+        foreach($disconts as $discount){
+            $totalDiscount+=$discount->discountPercentage;
+        }
 
-        foreach($disconts as $discount){$totalDiscount+=$discount->discountPercentage;}
         $product->price-=$product->price*($totalDiscount/100);
-
-        $data+=array('unitPrice'=>$product->price,'cart_id'=>Auth::authenticate()->cart->id);
-
+        $data += [
+            'unitPrice' => $product->price,
+            'cart_id' => Auth::authenticate()->cart->id,
+        ];
         return $this->cartItemRepository->createCartItem($data);
     }
 

@@ -37,6 +37,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/product/{id}', [ProductController::class, 'show']);
     Route::resource('/cart/item', CartItemController::class);
     Route::delete('/cart/item', [CartItemController::class, 'clear']);
+    Route::get('/user',[UserController::class, 'getUser']);
+    Route::put('/user',[UserController::class, 'update']);
+    Route::post('/user/image',[UserController::class, 'input_image']);
+    Route::delete('/user',[UserController::class, 'destroy']);
     Route::group(['middleware' => 'checkPermissionsModerator:sanctum'], function(){
         Route::resource('/product', ProductController::class)->except(['index','show']);
         Route::group(['middleware' => 'checkPermissionsAdmin:sanctum'], function(){
@@ -46,8 +50,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::resource('/discount', DiscountController::class);
         });
     });
-    Route::get('/user',[UserController::class, 'getUser']);
-    Route::put('/user',[UserController::class, 'update']);
-    Route::delete('/user',[UserController::class, 'destroy']);
 });
 

@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Services\ImageService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function __construct(protected ProductService $productService){}
+    public function __construct(protected ProductService $productService, protected ImageService $imageService){}
 
-    public function store(Request $request){
-        $data = $request->validate([
-            'name'=>'required',
-            'stock'=>'required',
-            'price'=>'required',
-            'category_id'=>'required'
-        ]);
+    public function store(StoreProductRequest $request){
+        $data=$request->validated();
+        unset($data['image']);
         $product=$this->productService->create($data);
-        return response()->json($data, 201);
+        if($request->hasFile('image')){
+            $image=$this->imageService->storeProduct($request,$product['id']);
+        }
+        return response()->json([$product,$image], 201);
     }
 
     public function index(){
@@ -30,13 +32,8 @@ class ProductController extends Controller
         return response()->json($product, 201);
     }
 
-    public function update(Request $request, $id){
-        $data=$request->validate([
-            'name'=>'sometimes',
-            'stock'=>'sometimes',
-            'price'=>'sometimes'
-        ]);
-        $product=$this->productService->update($data,$id);
+    public function update(UpdateProductRequest $request, $id){
+        $product=$this->productService->update($request->validated(),$id);
         return response()->json($product, 201);
     }
 

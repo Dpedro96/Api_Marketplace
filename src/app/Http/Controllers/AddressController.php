@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAddressRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Services\AddressService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,16 +12,8 @@ class AddressController extends Controller
 {
     public function __construct(protected AddressService $addressService){}
 
-    public function store(Request $request){
-        $data = $request->validate([
-            'street'=>'required',
-            'number'=>'required',
-            'zip'=>'required',
-            'city'=>'required',
-            'state'=>'required',
-            'country'=>'required',
-        ]);
-        $user = $this->addressService->create($data);
+    public function store(StoreAddressRequest $request){
+        $user = $this->addressService->create($request->validated());
         return response()->json($user, 201);
     }
 
@@ -30,16 +24,8 @@ class AddressController extends Controller
 
     public function show($address){}
 
-    public function update(Request $request, $id){
-        $data = $request->validate([
-            'street'=>'sometimes',
-            'number'=>'sometimes',
-            'zip'=>'sometimes',
-            'city'=>'sometimes',
-            'state'=>'sometimes',
-            'country'=>'sometimes'
-        ]);
-        $address = $this->addressService->update($data, $id);
+    public function update(UpdateUserRequest $request, $id){
+        $address = $this->addressService->update($request, $id);
         return response()->json($address, 201);
     }
 

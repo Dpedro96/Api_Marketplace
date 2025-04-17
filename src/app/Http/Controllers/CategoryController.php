@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\StoreCategoryRequest;
 use App\Services\CategoryService;
+use App\Services\ImageService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function __construct(protected CategoryService $categoryService){}
+    public function __construct(protected CategoryService $categoryService, protected ImageService $imageService){}
 
-    public function store(Request $request){
-        $data = $request->validate([
-            'name'=>'required',
-            'description'=>'required'
-        ]);
+    public function store(StoreCategoryRequest $request){
+        $data=$request->validated();
+        unset($data['image']);
         $category = $this->categoryService->create($data);
-        return response()->json($data, 201);
+        if($request->hasFile('image')){
+            $image=$this->imageService->storeCategory($request,$category['id']);
+        }
+        return response()->json([$category,$image], 201);
     }
 
     public function index(){
@@ -38,5 +42,10 @@ class CategoryController extends Controller
 
     public function destroy($id){
         $bool=$this->categoryService->delete($id);
+    }
+
+    public function input_image(CreateUserRequest $request){
+        $request->validated();
+        return response()->json($this->imageService->store($request), 200);
     }
 }

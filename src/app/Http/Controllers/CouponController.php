@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCouponRequest;
+use App\Http\Requests\UpdateCouponRequest;
 use App\Services\CouponService;
 use Illuminate\Http\Request;
 
@@ -9,14 +11,8 @@ class CouponController extends Controller
 {
     public function __construct(protected CouponService $couponService){}
 
-    public function store(Request $request){
-        $data = $request->validate([
-            'code'=>'required',
-            'startDate'=>'required',
-            'endDate'=>'required',
-            'discountPercentage'=>'required'
-        ]);
-        $coupon = $this->couponService->create($data);
+    public function store(StoreCouponRequest $request){
+        $coupon = $this->couponService->create($request->validated());
         return response()->json($coupon, 201);
     }
 
@@ -30,16 +26,10 @@ class CouponController extends Controller
         return response()->json($coupon, 201);
     }
 
-    public function update(Request $request, $id){
-        $data = $request->validate([
-            'code'=>'sometimes',
-            'startDate'=>'sometimes',
-            'endDate'=>'sometimes',
-            'discountPercentage'=>'sometimes'
-        ]);
-        $coupon = $this->couponService->update($data,$id);
+    public function update(UpdateCouponRequest $request, $id){
+        $coupon = $this->couponService->update($request->validated(),$id);
         return response()->json($coupon, 201);
-    }
+    }   
 
     public function destroy($id){
         $coupon = $this->couponService->delete($id);
