@@ -25,4 +25,14 @@ class UpdateOrderRequest extends FormRequest
             'status' => 'sometimes|in:PENDING,PROCESSING,SHIPPED,COMPLETED,CANCELED',
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'status.in' => 'O status da ordem deve ser um dos seguintes: PENDING, PROCESSING, SHIPPED, COMPLETED ou CANCELED.',
+        ];
+    }
 }

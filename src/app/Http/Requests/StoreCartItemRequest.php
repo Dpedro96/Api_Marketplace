@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreCartItemRequest extends FormRequest
@@ -26,6 +25,20 @@ class StoreCartItemRequest extends FormRequest
             'product_id' => 'required|exists:products,id',
             'quantity'   => 'required|integer|min:1',
         ];
+    }
 
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'product_id.required' => 'O produto é obrigatório.',
+            'product_id.exists' => 'O produto selecionado não foi encontrado.',
+
+            'quantity.required' => 'A quantidade é obrigatória.',
+            'quantity.integer' => 'A quantidade deve ser um número inteiro.',
+            'quantity.min' => 'A quantidade mínima é 1.',
+        ];
     }
 }

@@ -26,4 +26,17 @@ class StoreOrderRequest extends FormRequest
             'coupon_id'  => 'sometimes|exists:coupons,id'
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'address_id.required' => 'O endereço é obrigatório para finalizar o pedido.',
+            'address_id.exists'   => 'O endereço selecionado não foi encontrado.',
+
+            'coupon_id.exists'    => 'O cupom informado não é válido.',
+        ];
+    }
 }

@@ -25,4 +25,16 @@ class UpdateCartItemRequest extends FormRequest
             'quantity' => 'required|integer|min:1'
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'quantity.required' => 'A quantidade do item é obrigatória.',
+            'quantity.integer'  => 'A quantidade do item deve ser um número inteiro.',
+            'quantity.min'      => 'A quantidade do item deve ser pelo menos 1.',
+        ];
+    }
 }

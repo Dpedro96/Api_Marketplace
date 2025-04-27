@@ -14,12 +14,13 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request){
         $data=$request->validated();
+        $image=[];
         unset($data['image']);
         $category = $this->categoryService->create($data);
         if($request->hasFile('image')){
             $image=$this->imageService->storeCategory($request,$category['id']);
         }
-        return response()->json([$category,$image], 201);
+        return response()->json([$category,"image"=>$image], 201);
     }
 
     public function index(){

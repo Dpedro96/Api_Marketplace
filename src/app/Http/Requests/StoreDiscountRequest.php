@@ -29,4 +29,32 @@ class StoreDiscountRequest extends FormRequest
             'product_id'          => 'required|exists:products,id'
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'description.required' => 'A descrição é obrigatória.',
+            'description.string' => 'A descrição deve ser um texto.',
+            'description.max' => 'A descrição não pode ter mais que 255 caracteres.',
+
+            'startDate.required' => 'A data de início é obrigatória.',
+            'startDate.date' => 'A data de início deve ser uma data válida.',
+            'startDate.before_or_equal' => 'A data de início deve ser anterior ou igual à data de término.',
+
+            'endDate.required' => 'A data de término é obrigatória.',
+            'endDate.date' => 'A data de término deve ser uma data válida.',
+            'endDate.after_or_equal' => 'A data de término deve ser posterior ou igual à data de início.',
+
+            'discountPercentage.required' => 'O percentual de desconto é obrigatório.',
+            'discountPercentage.numeric' => 'O percentual de desconto deve ser um número.',
+            'discountPercentage.min' => 'O percentual de desconto deve ser no mínimo 0%.',
+            'discountPercentage.max' => 'O percentual de desconto não pode ser maior que 100%.',
+
+            'product_id.required' => 'O ID do produto é obrigatório.',
+            'product_id.exists' => 'O produto selecionado não foi encontrado.',
+        ];
+    }
 }

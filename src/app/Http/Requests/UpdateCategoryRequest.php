@@ -26,4 +26,17 @@ class UpdateCategoryRequest extends FormRequest
             'description' => 'sometimes|string|max:500'
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.string'        => 'O nome da categoria deve ser uma string válida.',
+            'name.max'           => 'O nome da categoria não pode ter mais de 255 caracteres.',
+            'description.string' => 'A descrição da categoria deve ser uma string válida.',
+            'description.max'    => 'A descrição da categoria não pode ter mais de 500 caracteres.',
+        ];
+    }
 }

@@ -28,4 +28,30 @@ class StoreCouponRequest extends FormRequest
             'discountPercentage'=> 'required|numeric|min:0|max:100',
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'code.required' => 'O código do cupom é obrigatório.',
+            'code.string' => 'O código do cupom deve ser um texto.',
+            'code.max' => 'O código do cupom não pode ter mais que 255 caracteres.',
+            'code.unique' => 'Este código de cupom já está sendo utilizado.',
+
+            'startDate.required' => 'A data de início é obrigatória.',
+            'startDate.date' => 'A data de início deve ser uma data válida.',
+            'startDate.before_or_equal' => 'A data de início deve ser anterior ou igual à data de término.',
+
+            'endDate.required' => 'A data de término é obrigatória.',
+            'endDate.date' => 'A data de término deve ser uma data válida.',
+            'endDate.after_or_equal' => 'A data de término deve ser posterior ou igual à data de início.',
+
+            'discountPercentage.required' => 'O percentual de desconto é obrigatório.',
+            'discountPercentage.numeric' => 'O percentual de desconto deve ser um número.',
+            'discountPercentage.min' => 'O percentual de desconto deve ser no mínimo 0%.',
+            'discountPercentage.max' => 'O percentual de desconto não pode ultrapassar 100%.',
+        ];
+    }
 }

@@ -27,4 +27,24 @@ class StoreCategoryRequest extends FormRequest
             'image'       => 'sometimes|file|mimes:jpg,png,jpeg|max:2048',
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'O nome da categoria é obrigatório.',
+            'name.string' => 'O nome da categoria deve ser um texto.',
+            'name.max' => 'O nome da categoria não pode ter mais que 255 caracteres.',
+
+            'description.required' => 'A descrição da categoria é obrigatória.',
+            'description.string' => 'A descrição da categoria deve ser um texto.',
+            'description.max' => 'A descrição da categoria não pode ter mais que 500 caracteres.',
+
+            'image.file' => 'A imagem deve ser um arquivo válido.',
+            'image.mimes' => 'A imagem deve ser do tipo: jpg, png ou jpeg.',
+            'image.max' => 'A imagem não pode ter mais que 2MB.',
+        ];
+    }
 }

@@ -30,4 +30,36 @@ class UpdateAddressRequest extends FormRequest
             'country' => 'sometimes|string|max:100',
         ];
     }
+
+    /**
+     * Custom error messages.
+     */
+    public function messages(): array
+    {
+        return [
+            'street.sometimes'  => 'Se o campo "rua" for preenchido, deve ser um texto com até 255 caracteres.',
+            'street.string'     => 'O campo "rua" deve ser uma string válida.',
+            'street.max'        => 'O campo "rua" não pode ultrapassar 255 caracteres.',
+            
+            'number.sometimes'  => 'Se o campo "número" for preenchido, ele deve ser um número maior ou igual a 1.',
+            'number.numeric'    => 'O campo "número" deve ser um número.',
+            'number.min'        => 'O campo "número" deve ser maior ou igual a 1.',
+            
+            'zip.sometimes'     => 'Se o campo "CEP" for preenchido, ele deve ter entre 5 e 10 caracteres.',
+            'zip.string'        => 'O campo "CEP" deve ser uma string.',
+            'zip.digits_between'=> 'O campo "CEP" deve ter entre 5 e 10 caracteres.',
+            
+            'city.sometimes'    => 'Se o campo "cidade" for preenchido, ele deve ser um texto com até 100 caracteres.',
+            'city.string'       => 'O campo "cidade" deve ser uma string válida.',
+            'city.max'          => 'O campo "cidade" não pode ultrapassar 100 caracteres.',
+            
+            'state.sometimes'   => 'Se o campo "estado" for preenchido, ele deve ser um texto com até 100 caracteres.',
+            'state.string'      => 'O campo "estado" deve ser uma string válida.',
+            'state.max'         => 'O campo "estado" não pode ultrapassar 100 caracteres.',
+            
+            'country.sometimes' => 'Se o campo "país" for preenchido, ele deve ser um texto com até 100 caracteres.',
+            'country.string'    => 'O campo "país" deve ser uma string válida.',
+            'country.max'       => 'O campo "país" não pode ultrapassar 100 caracteres.',
+        ];
+    }
 }

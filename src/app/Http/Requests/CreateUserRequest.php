@@ -25,4 +25,19 @@ class CreateUserRequest extends FormRequest
             'image' => 'required|file|mimes:jpg,png,jpeg|max:2048',
         ];
     }
+
+    /**
+     * Get custom error messages for validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'image.required' => 'A imagem é obrigatória.',
+            'image.file' => 'O arquivo enviado deve ser um arquivo válido.',
+            'image.mimes' => 'A imagem deve ser do tipo JPG, PNG ou JPEG.',
+            'image.max' => 'A imagem não pode ter mais que 2MB.',
+        ];
+    }
 }

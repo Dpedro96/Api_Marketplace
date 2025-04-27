@@ -24,7 +24,7 @@ class DiscountController extends Controller
         return response()->json($this->discountService->getById($id), 201);
     }
 
-    public function update(UpdateDiscountRequest $request,$id){
+    public function update(UpdateDiscountRequest $request, $id){
         return response()->json($this->discountService->update($request->validated(),$id), 201);
     }
 
