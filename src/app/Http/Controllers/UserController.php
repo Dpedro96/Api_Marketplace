@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UploadImageRequest;
 use App\Http\Requests\RegisterAuthRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Services\ImageService;
@@ -17,13 +17,12 @@ class UserController extends Controller
     public function __construct(protected UserService $userService, protected CartController $cartController, protected ImageService $imageService){}
 
     public function getUser(){
-        $user=$this->userService->getByUser();
-        return response()->json($user, 201);
+        return response()->json($this->userService->getByUser(), 200);
     }
 
     public function update(UpdateUserRequest $request){
         $this->userService->updateUser($request->validated());
-        return response()->json(["Mensage"=>"Erro ao Alterar Usuário"], 201);
+        return response()->json(["Mensage"=>"Usuário atualizado com sucesso."], 200);
     }
 
     public function storeModerator(RegisterAuthRequest $request){
@@ -33,11 +32,11 @@ class UserController extends Controller
     }
 
     public function destroy(){
-        return response()->json($this->userService->delete(), 201);
+        return response()->json($this->userService->delete(), 204);
     }
 
-    public function input_image(CreateUserRequest $request){
+    public function input_image(UploadImageRequest $request){
         $request->validated();
-        return response()->json($this->imageService->store($request), 200);
+        return response()->json($this->imageService->storeUser($request), 201);
     }
 }

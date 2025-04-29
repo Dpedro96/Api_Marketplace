@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use Carbon\Carbon;
 
 class ProductRepository{
     public function __construct(protected Product $productModel){}
@@ -11,11 +12,30 @@ class ProductRepository{
     }
 
     public function getAllProduct(){
-        return $this->productModel->get();
+        return $this->productModel
+        ->with(['discount' => function ($query) {
+            $query->where('startDate', '<=', Carbon::now())
+                  ->where('endDate', '>=', Carbon::now());
+        }])
+        ->get()
+        ->map(function ($product) {
+            $discount = $product->discount->sum('discountPercentage');
+            $product->final_price = round($product->price * (1 - $discount / 100), 2);
+            return $product;
+        });
     }
 
     public function getByIdProduct($id){
-        return $this->productModel->findOrFail($id);
+        $product = $this->productModel
+        ->with(['discount' => function ($query) {
+            $query->where('startDate', '<=', Carbon::now())
+                  ->where('endDate', '>=', Carbon::now());
+        }])
+        ->findOrFail($id);
+
+        $discount = $product->discount->sum('discountPercentage');
+        $product->final_price = round($product->price * (1 - $discount / 100), 2);
+        return $product;
     }
     
     public function updateProduct($data,$id){
@@ -23,6 +43,7 @@ class ProductRepository{
     }
 
     public function deleteProduct($id){
-        return $this->productModel->findOrFail($id)->delete();
+        $product = Product::find($id);
+        $product->delete();
     }
 }

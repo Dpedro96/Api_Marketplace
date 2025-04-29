@@ -10,33 +10,32 @@ class ImageService{
 
     public function __construct(protected ImagenRepository $imagenRepository){}
 
-    public function store(Request $request){
+    public function store(Request $request, string $folder){
         if($request->hasFile('image')){
             $image = $request->file('image');
-            $ext=$image->getClientOriginalExtension();
-            $imageName='media_'.Uuid::uuid4().'.'.$ext;
-            return $imageName;
+            $ext = $image->getClientOriginalExtension();
+            $imageName = 'media_'.Uuid::uuid4().'.'.$ext;
+            $path = $image->storeAs($folder, $imageName);
+            return $path; 
         }
-    }
+        return null;
+    }    
 
     public function storeUser(Request $request){
-        $imageName=$this->store($request);
-        $request->file('image')->storeAs('user', $imageName);
-        $this->imagenRepository->createUser($imageName,Auth::id());
-        return $imageName;
+        $path = $this->store($request, 'user');
+        $this->imagenRepository->createUser($path, Auth::id());
+        return $path;
     }
-
-    public function storeCategory(Request $request,$id){
-        $imageName=$this->store($request);
-        $request->file('image')->storeAs('category', $imageName);
-        $this->imagenRepository->createCategory($imageName,$id);
-        return $imageName;
+    
+    public function storeCategory(Request $request, $id){
+        $path = $this->store($request, 'category');
+        $this->imagenRepository->createCategory($path, $id);
+        return $path;
     }
-
-    public function storeProduct(Request $request,$id){
-        $imageName=$this->store($request);
-        $request->file('image')->storeAs('product', $imageName);
-        $this->imagenRepository->createProduct($imageName,$id);
-        return $imageName;
+    
+    public function storeProduct(Request $request, $id){
+        $path = $this->store($request, 'product');
+        $this->imagenRepository->createProduct($path, $id);
+        return $path;
     }
 }

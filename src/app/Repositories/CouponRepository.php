@@ -19,7 +19,9 @@ class CouponRepository{
     }
 
     public function updateCoupon($request,$id){
-        return $this->couponModel->find($id)->update($request);
+        $coupon = $this->couponModel->findOrFail($id);
+        $coupon->update($request);
+        return $coupon;
     }
 
     public function deleteCoupon($id){

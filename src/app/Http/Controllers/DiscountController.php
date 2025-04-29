@@ -17,18 +17,19 @@ class DiscountController extends Controller
     }
 
     public function index(){
-        return response()->json($this->discountService->getAll(), 201);
+        return response()->json($this->discountService->getAll(), 200);
     }
 
     public function show($id){
-        return response()->json($this->discountService->getById($id), 201);
+        return response()->json($this->discountService->getById($id), 200);
     }
 
     public function update(UpdateDiscountRequest $request, $id){
-        return response()->json($this->discountService->update($request->validated(),$id), 201);
+        return response()->json($this->discountService->update($request->validated(),$id), 200);
     }
 
     public function destroy($id){
-        return response()->json($this->discountService->delete($id), 201);
+        $this->discountService->delete($id);
+        return response()->noContent();
     }
 }

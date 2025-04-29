@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\UploadImageRequest;
 use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Services\CategoryService;
 use App\Services\ImageService;
-use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -25,28 +25,30 @@ class CategoryController extends Controller
 
     public function index(){
         $categories=$this->categoryService->getAll();
-        return response()->json($categories, 201);
+        return response()->json($categories, 200);
     }
 
     public function show($id){
         $category=$this->categoryService->getById($id);
-        return response()->json($category, 201);
+        return response()->json($category, 200);
     }
 
-    public function update(Request $request, $id){
-        $data = $request->validate([
-            'name'=>'sometimes',
-            'description'=>'sometimes'
-        ]);
-        return response()->json($this->categoryService->update($data,$id), 201);
+    public function update(UpdateCategoryRequest $request, $id){
+        return response()->json($this->categoryService->update($request->validated(),$id), 200);
     }
 
-    public function destroy($id){
-        $bool=$this->categoryService->delete($id);
+    public function destroy($id)
+    {
+        $bool = $this->categoryService->delete($id);
+        if($bool){
+            return response()->json(['message' => 'Categoria deletada com sucesso.'], 200);
+        }else{
+            return response()->json(['message' => 'Categoria não encontrada.'], 404);
+        }
     }
 
-    public function input_image(CreateUserRequest $request){
+    public function input_image(UploadImageRequest $request, $id){
         $request->validated();
-        return response()->json($this->imageService->store($request), 200);
+        return response()->json($this->imageService->storeCategory($request, $id), 204);
     }
 }

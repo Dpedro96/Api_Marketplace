@@ -16,23 +16,24 @@ class OrderController extends Controller
     }
 
     public function index(){
-        return response()->json($this->orderService->getAll(), 201);
+        return response()->json($this->orderService->getAll(), 200);
     }
 
     public function show($id){
         $order=$this->orderService->getById($id);
-        return response()->json($order, 201);
+        return response()->json($order, 200);
     }
 
     public function update(UpdateOrderRequest $request, $id){
-        return response()->json($this->orderService->update($request->validated(),$id), 201);
+        return response()->json($this->orderService->update($request->validated(),$id), 200);
     }
 
     public function destroy($id){
-        $order=$this->orderService->delete($id);
-        if($order){
-            return response()->json($order, 201);
+        $deleted = $this->orderService->delete($id);
+        if ($deleted) {
+            return response()->json(['message' => 'Pedido cancelado com sucesso.'], 200);
         }
-        return response()->json(['mensage'=>'Item não excluido'], 201);
+        return response()->json(['message' => 'Pedido não encontrado ou não pôde ser cancelado.'], 404);
     }
+    
 }

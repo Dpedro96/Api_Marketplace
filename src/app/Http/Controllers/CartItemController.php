@@ -16,18 +16,20 @@ class CartItemController extends Controller
     }
 
     public function index(){
-        return response()->json($this->cartItemService->getAll(), 201);
+        return response()->json($this->cartItemService->getAll(), 200);
     }
 
     public function update(UpdateCartItemRequest $request,$id){
-        return response()->json($this->cartItemService->updateCart($request->validated(),$id), 201);
+        return response()->json($this->cartItemService->updateCart($request->validated(),$id), 200);
     }
 
     public function destroy($id){
-        return response()->json($this->cartItemService->remove($id), 204);
+        $this->cartItemService->remove($id);
+        return response()->noContent(); 
     }
-
+    
     public function clear(){
-        return response()->json($this->cartItemService->clearCart(), 204);
+        $this->cartItemService->clearCart();
+        return response()->noContent(); 
     }
 }

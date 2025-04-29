@@ -9,6 +9,8 @@ class Product extends Model
 {
     protected $fillable = ['name', 'stock', 'price', 'category_id','imagen_path'];
 
+    protected $dates = ['deleted_at'];
+
     public function cartItem(){
         return $this->hasMany(CartItem::class);
     }

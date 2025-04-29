@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::group(['middleware' => 'auth:sanctum'], function () {
+    // Authenticated User Routes
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::resource('/address', AddressController::class);
     Route::resource('/orders', OrderController::class);
     Route::get('/category', [CategoryController::class, 'index']);
@@ -37,15 +39,21 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/product/{id}', [ProductController::class, 'show']);
     Route::resource('/cart/item', CartItemController::class);
     Route::delete('/cart/item', [CartItemController::class, 'clear']);
-    Route::get('/user',[UserController::class, 'getUser']);
-    Route::put('/user',[UserController::class, 'update']);
-    Route::post('/user/image',[UserController::class, 'input_image']);
-    Route::delete('/user',[UserController::class, 'destroy']);
-    Route::group(['middleware' => 'checkPermissionsModerator:sanctum'], function(){
-        Route::resource('/product', ProductController::class)->except(['index','show']);
-        Route::group(['middleware' => 'checkPermissionsAdmin:sanctum'], function(){
-            Route::post('/user/moderator',[UserController::class, 'storeModerator']);
-            Route::resource('/category', CategoryController::class)->except(['index','show']);
+    Route::get('/user', [UserController::class, 'getUser']);
+    Route::put('/user', [UserController::class, 'update']);
+    Route::post('/user/image', [UserController::class, 'input_image']);
+    Route::delete('/user', [UserController::class, 'destroy']);
+
+    // Moderator Routes
+    Route::group(['middleware' => 'checkPermissionsModerator:sanctum'], function () {
+        Route::resource('/product', ProductController::class)->except(['index', 'show']);
+        Route::post('/product/image/{id}', [ProductController::class, 'input_image']);
+
+        // Admin Routes
+        Route::group(['middleware' => 'checkPermissionsAdmin:sanctum'], function () {
+            Route::post('/user/moderator', [UserController::class, 'storeModerator']);
+            Route::resource('/category', CategoryController::class)->except(['index', 'show']);
+            Route::post('/category/image/{id}', [CategoryController::class, 'input_image']);
             Route::resource('/coupon', CouponController::class);
             Route::resource('/discount', DiscountController::class);
         });

@@ -1,7 +1,8 @@
 <?php
 namespace App\Services;
 
-use App\Models\Discount;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Repositories\CartItemRepository;
 use App\Repositories\DiscountRepository;
 use App\Repositories\ProductRepository;
@@ -19,34 +20,48 @@ class CartItemService{
         
         $product=$this->productRepository->getByIdProduct($data['product_id']);
 
-        if($data['quantity']>$product->stock){return "A quantidade solicitada excede o estoque disponível";}
+        if ($data['quantity'] > $product->stock) {
+            throw new UnprocessableEntityHttpException('A quantidade solicitada excede o estoque disponível.');
+        }
 
         $disconts=$this->discountRepository->getByIdProductDiscount($product['id']);
         foreach($disconts as $discount){
             $totalDiscount+=$discount->discountPercentage;
         }
 
-        $product->price-=$product->price*($totalDiscount/100);
+        if($totalDiscount >= 100){
+            $product->price = 0;
+        }else{
+            $product->price -= $product->price * ($totalDiscount / 100);
+        }
         $data += [
             'unitPrice' => $product->price,
-            'cart_id' => Auth::authenticate()->cart->id,
+            'cart_id' => Auth::user()->cart->id,
         ];
         return $this->cartItemRepository->createCartItem($data);
     }
 
     public function getAll(){
-        return $this->cartItemRepository->getAllCartItems(Auth::authenticate()->cart->id);
+        return $this->cartItemRepository->getAllCartItems(Auth::user()->cart->id);
     }
 
-    public function updateCart($data,$id){
-        return $this->cartItemRepository->updateCartItem($data,$id,Auth::authenticate()->cart->id);
+    public function updateCart($data, $id){
+        try {
+            return $this->cartItemRepository->updateCartItem($data, $id, Auth::user()->cart->id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Item do carrinho não encontrado.'], 404);
+        }
     }
-
+    
     public function remove($id){
-        return $this->cartItemRepository->removeCartItem($id,Auth::authenticate()->cart->id);
+        try {
+            return $this->cartItemRepository->removeCartItem($id, Auth::user()->cart->id);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Item do carrinho não encontrado.'], 404);
+        }
     }
 
     public function clearCart(){
-        return $this->cartItemRepository->clearCartItems(Auth::authenticate()->cart->id);
+        return $this->cartItemRepository->clearCartItems(Auth::user()->cart->id);
     }
 }

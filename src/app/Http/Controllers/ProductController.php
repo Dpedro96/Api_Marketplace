@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\UploadImageRequest;
 use App\Services\ImageService;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
@@ -24,22 +25,23 @@ class ProductController extends Controller
     }
 
     public function index(){
-        $products=$this->productService->getAll();
-        return response()->json($products, 201);
+        return response()->json($this->productService->getAll(), 200);
     }
 
     public function show($id){
-        $product=$this->productService->getById($id);
-        return response()->json($product, 201);
+        return response()->json($this->productService->getById($id), 200);
     }
 
     public function update(UpdateProductRequest $request, $id){
-        $product=$this->productService->update($request->validated(),$id);
-        return response()->json($product, 201);
+        return response()->json($this->productService->update($request->validated(),$id), 200);
     }
 
     public function destroy($id){
-        $product=$this->productService->delete($id);
-        return response()->json($product, 201);
+        return response()->json($this->productService->delete($id), 204);
+    }
+
+    public function input_image(UploadImageRequest $request, $id){
+        $request->validated();
+        return response()->json($this->imageService->storeProduct($request, $id), 204);
     }
 }

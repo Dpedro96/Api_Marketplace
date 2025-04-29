@@ -18,16 +18,21 @@ class AddressService{
         return $this->addressRepository->getAll($user_id);
     }
 
-    public function update($date, $id){
-        $user_id=Auth::id();
-        $addressUp = $this->addressRepository->getById($id, $user_id);
-        $addressUp[0]->update($date);
-        return $addressUp[0];
+    public function getById($id){
+        $address = $this->addressRepository->getById($id, auth()->id());
+    
+        if (!$address) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Endereço não encontrado.");
+        }
+    
+        return $address;
+    }
+
+    public function update($request, $id){
+        return $this->addressRepository->update($id, Auth::id(), $request);
     }
 
     public function delete($id){
-        $user_id=Auth::id();
-        $addresss = $this->addressRepository->getById($id,$user_id);
-        return $addresss[0]->delete();
+        return $this->addressRepository->delete($id, Auth::id());
     }
 }

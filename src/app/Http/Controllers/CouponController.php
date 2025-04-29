@@ -18,21 +18,21 @@ class CouponController extends Controller
 
     public function index(){
         $coupons = $this->couponService->getAll();
-        return response()->json($coupons, 201);
+        return response()->json($coupons, 200);
     }
 
     public function show($id){
         $coupon = $this->couponService->getById($id);
-        return response()->json($coupon, 201);
+        return response()->json($coupon, 200);
     }
 
     public function update(UpdateCouponRequest $request, $id){
         $coupon = $this->couponService->update($request->validated(),$id);
-        return response()->json($coupon, 201);
+        return response()->json($coupon, 200);
     }   
 
     public function destroy($id){
-        $coupon = $this->couponService->delete($id);
-        return response()->json($coupon, 201);
+        $this->couponService->delete($id);
+        return response()->noContent(); 
     }
 }

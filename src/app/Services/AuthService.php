@@ -15,9 +15,9 @@ class AuthService{
 
     public function login($credentials){
         if(!Auth::attempt($credentials)){
-            return response(['mensage'=>'Não Autorizado'], 401);
+            return null;
         }
-        $user=User::where('email',$credentials['email'])->first();
-        return $token = $user->createToken($user->name.'-AuthToken')->plainTextToken;
+        $user = User::where('email', $credentials['email'])->first();
+        return $user->createToken($user->name . '-AuthToken')->plainTextToken;
     }
 }

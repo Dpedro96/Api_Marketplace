@@ -11,7 +11,7 @@ class CartItemRepository{
     }
 
     public function getAllCartItems($cart_id){
-        return $this->cartItemModel->where('cart_id',$cart_id)->get();
+        return $this->cartItemModel->with('product') ->where('cart_id', $cart_id)->get();
     }
 
     public function updateCartItem($data,$id,$cart_id){

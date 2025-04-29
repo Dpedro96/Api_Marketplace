@@ -15,7 +15,23 @@ class AddressRepository{
     }
 
     public function getById($id,$user_id){
-        return $this->addressModel->where('user_id',$user_id)->find($id);
+        return $this->addressModel->where('id', $id)->where('user_id', $user_id)->first();
+    }
+
+    public function update($id, $user_id, $data){
+        $address = $this->getById($id, $user_id);
+        if (!$address) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Endereço não encontrado.");
+        }
+        return $address->update($data);
+    }
+
+    public function delete($id, $user_id){
+        $address = $this->getById($id, $user_id);
+        if (!$address) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Endereço não encontrado.");
+        }
+        return $address->delete();
     }
 
 }

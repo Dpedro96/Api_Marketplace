@@ -11,6 +11,6 @@ class CheckPermissionsAdmin{
         if($isAdmin=='ADMIN'){
             return $next($request);
         }
-        return response()->json(["Mensage"=>"Não Autorizado"], 201);
+        return response()->json(["Mensage"=>"Não Autorizado"], 401);
     }
 }

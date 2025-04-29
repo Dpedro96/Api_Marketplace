@@ -18,7 +18,7 @@ class OrderService{
 
     public function create($request){
         $totalAmount=0;
-        $cart_id=Auth::authenticate()->cart->id;
+        $cart_id=Auth::user()->cart->id;
         $items=$this->cartItemRepository->getAllCartItems($cart_id);
         foreach($items as $item){
             $totalAmount+=$item->unitPrice*$item->quantity;
@@ -61,16 +61,15 @@ class OrderService{
 
     public function delete($id){
         $user_id=Auth::id();
-        $check=$this->orderRepository->deleteOrder($id,$user_id);
-        if(!$check){
+        $order = $this->orderRepository->getByIdOrder($id, $user_id);
+        if(!$order){
             return false;
         }
-        $item=$this->orderRepository->getByIdOrder($id,$user_id);
-        foreach($item->orderItem as $item){
-            $product=$this->productRepository->getByIdProduct($item->product_id);
-            $data=['stock'=>$product->stock+$item->quantity];
-            $this->productRepository->updateProduct($data,$item['product_id']);
+        foreach($order->orderItem as $orderItem){
+            $product=$this->productRepository->getByIdProduct($orderItem->product_id);
+            $data=['stock'=>$product->stock+$orderItem->quantity];
+            $this->productRepository->updateProduct($data,$orderItem['product_id']);
         }
-        return $check;
+        return $this->orderRepository->deleteOrder($id, $user_id);
     }
 }

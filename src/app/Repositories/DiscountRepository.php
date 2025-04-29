@@ -15,7 +15,7 @@ class DiscountRepository{
     }
 
     public function getByIdDiscount($id){
-        return $this->discountModel->findOrfail($id);
+        return $this->discountModel->findOrFail($id);
     }
 
     public function getByIdProductDiscount($id_product){
@@ -23,7 +23,9 @@ class DiscountRepository{
     }
 
     public function updateDiscount($data,$id){
-        return $this->discountModel->findOrFail($id)->update($data);
+        $discount = $this->discountModel->findOrFail($id);
+        $discount->update($data);
+        return $discount;
     }
 
     public function deleteDiscount($id){
