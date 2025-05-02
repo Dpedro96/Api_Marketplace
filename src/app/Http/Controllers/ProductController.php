@@ -15,12 +15,9 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request){
         $data=$request->validated();
-        $image=[];
         unset($data['image']);
         $product=$this->productService->create($data);
-        if($request->hasFile('image')){
-            $image=$this->imageService->storeProduct($request,$product['id']);
-        }
+        $image=$this->imageService->storeProduct($request,$product['id']);
         return response()->json([$product,"imagem"=>$image], 201);
     }
 
@@ -42,6 +39,6 @@ class ProductController extends Controller
 
     public function input_image(UploadImageRequest $request, $id){
         $request->validated();
-        return response()->json($this->imageService->storeProduct($request, $id), 204);
+        return response()->json($this->imageService->storeProduct($request, $id), 200);
     }
 }

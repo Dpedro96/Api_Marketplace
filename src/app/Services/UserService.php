@@ -4,12 +4,17 @@ namespace App\Services;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\URL;
+    
 class UserService{
     public function __construct(protected UserRepository $userRepository){}
 
     public function getByUser(){
-        return $this->userRepository->getByUserAuth(Auth::id());
+        $user = $this->userRepository->getByUserAuth(Auth::id());
+        if ($user) {
+            $user->image_url = URL::to($user->imagen_name);
+        }
+        return $user;
     }
 
     public function updateUser($data){

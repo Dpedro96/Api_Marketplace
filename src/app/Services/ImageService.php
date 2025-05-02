@@ -10,32 +10,44 @@ class ImageService{
 
     public function __construct(protected ImagenRepository $imagenRepository){}
 
-    public function store(Request $request, string $folder){
-        if($request->hasFile('image')){
+    public function store(Request $request, string $folder)
+    {
+        if ($request->hasFile('image')) {
             $image = $request->file('image');
             $ext = $image->getClientOriginalExtension();
-            $imageName = 'media_'.Uuid::uuid4().'.'.$ext;
-            $path = $image->storeAs($folder, $imageName);
-            return $path; 
+            $imageName = 'media_' . Uuid::uuid4() . '.' . $ext;
+            $path = $image->storeAs($folder, $imageName, 'public');
+            return 'storage/' . $path;
         }
-        return null;
-    }    
+        $defaultImagePath = 'image_default.png'; 
+        return 'storage/' . $defaultImagePath; 
+    }
 
-    public function storeUser(Request $request){
-        $path = $this->store($request, 'user');
-        $this->imagenRepository->createUser($path, Auth::id());
-        return $path;
+    public function storeUser(Request $request)
+    {
+        $relativePath = $this->store($request, 'user');
+        $this->imagenRepository->createUser($relativePath, Auth::id());
+        return url($relativePath);
     }
-    
-    public function storeCategory(Request $request, $id){
-        $path = $this->store($request, 'category');
-        $this->imagenRepository->createCategory($path, $id);
-        return $path;
+
+    public function storeUserCreate(Request $request, $id)
+    {
+        $relativePath = $this->store($request, 'user');
+        $this->imagenRepository->createUser($relativePath, $id);
+        return url($relativePath);
     }
-    
-    public function storeProduct(Request $request, $id){
-        $path = $this->store($request, 'product');
-        $this->imagenRepository->createProduct($path, $id);
-        return $path;
+
+    public function storeCategory(Request $request, $id)
+    {
+        $relativePath = $this->store($request, 'category');
+        $this->imagenRepository->createCategory($relativePath, $id);
+        return url($relativePath);
+    }
+
+    public function storeProduct(Request $request, $id)
+    {
+        $relativePath = $this->store($request, 'product');
+        $this->imagenRepository->createProduct($relativePath, $id);
+        return url($relativePath);
     }
 }

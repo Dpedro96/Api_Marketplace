@@ -20,18 +20,11 @@ class AddressRepository{
 
     public function update($id, $user_id, $data){
         $address = $this->getById($id, $user_id);
-        if (!$address) {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Endereço não encontrado.");
-        }
         return $address->update($data);
     }
 
     public function delete($id, $user_id){
-        $address = $this->getById($id, $user_id);
-        if (!$address) {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Endereço não encontrado.");
-        }
-        return $address->delete();
+        return $this->getById($id, $user_id);         
     }
 
 }

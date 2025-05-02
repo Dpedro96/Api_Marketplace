@@ -27,6 +27,7 @@ class UserController extends Controller
 
     public function storeModerator(RegisterAuthRequest $request){
         $moderator=$this->userService->createModerator($request->validated());
+        $this->imageService->storeUser($request);
         $this->cartController->store($moderator['id']);
         return response()->json($moderator, 201);
     }

@@ -14,17 +14,14 @@ class AddressService{
     }
 
     public function getAll(){
-        $user_id=Auth::id();
-        return $this->addressRepository->getAll($user_id);
+        return $this->addressRepository->getAll(Auth::id());
     }
 
     public function getById($id){
-        $address = $this->addressRepository->getById($id, auth()->id());
-    
+        $address = $this->addressRepository->getById($id,Auth::id());
         if (!$address) {
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Endereço não encontrado.");
         }
-    
         return $address;
     }
 

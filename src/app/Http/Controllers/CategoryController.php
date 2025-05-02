@@ -13,15 +13,13 @@ class CategoryController extends Controller
     public function __construct(protected CategoryService $categoryService, protected ImageService $imageService){}
 
     public function store(StoreCategoryRequest $request){
-        $data=$request->validated();
-        $image=[];
-        unset($data['image']);
+        $data = $request->validated();
+        unset($data['image']);    
         $category = $this->categoryService->create($data);
-        if($request->hasFile('image')){
-            $image=$this->imageService->storeCategory($request,$category['id']);
-        }
-        return response()->json([$category,"image"=>$image], 201);
+        $image = $this->imageService->storeCategory($request, $category['id']);
+        return response()->json([$category, "image" => $image], 201);
     }
+    
 
     public function index(){
         $categories=$this->categoryService->getAll();
@@ -49,6 +47,6 @@ class CategoryController extends Controller
 
     public function input_image(UploadImageRequest $request, $id){
         $request->validated();
-        return response()->json($this->imageService->storeCategory($request, $id), 204);
+        return response()->json($this->imageService->storeCategory($request, $id), 200);
     }
 }
